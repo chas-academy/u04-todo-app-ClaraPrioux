@@ -1,9 +1,12 @@
 <?php
     include "config.php";
 
-    $sql = "SELECT * FROM tasks";
-    $result = $pdo->query($sql);
+    $stmt = $pdo->prepare("SELECT * FROM tasks");
+    $stmt->execute();
+ 
+    $results = $stmt->fetchAll();
 ?>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,23 +16,27 @@
     <body>
         <div class="container">
             <table class="table">
-                <head></head>
-                <th></th>
-                <tr></tr>
-                <tbody>
-                    <?php
-                        if($result->rowCount()>0){
-                            while($row=$result->fetch_assoc()){ ?>
-                                <tr>
-                                    <td><?php echo $row['title'];?></td>
-                                    <td><?php echo $row['description'];?></td>
-                                    <td><a class="btn btn-info" href="update.php?id=<?php echo $row['id'];?>">Edit</a>&nbsp;<a class="btn btn-danger" href="delete.php?id=<?php echo $row['id'];?>">Delete</a></td>
-                                </tr>
-                            <?php
-                            }
-                        }
-                        ?>
-                </tbody>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Completion</th>
+                </tr>
+                
+                <?php 
+                    foreach($results as $result) {
+                        echo "<tr>
+                                <td>" . $result['id'] . "</td>
+                                <td>" . $result['title'] . "</td>
+                                <td>" . $result['description'] . "</td>";
+                        if($result['completion'] == FALSE) {
+                            echo "<td><input type=\"checkbox\"></td>";
+                        } else {
+                            echo "<td><input type=\"checkbox\" checked></td>";
+                        }        
+                        echo  "</tr>";
+                    }  
+                ?>
             </table>
         </div>
     </body>

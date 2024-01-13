@@ -6,16 +6,16 @@
         $description = $_POST ['description'];
     
 
-    $sql = "INSERT INTO tasks (title, description) VALUES ('$title', '$description')";
-    $result = $conn->query($sql);
+        $sql = "INSERT INTO tasks (title, description) VALUES ('$title', '$description')";
+        $result = $pdo->query($sql);
 
-    if($result === TRUE){
-        echo "new record created successfully!";
-    } else {
-        echo "Error:" . $sql . "<br>" . $conn->error;
-    }
+        if($result === TRUE){
+            echo "new record created successfully!";
+        } else {
+            echo "Error:" . $sql . "<br>" . $pdo->errorInfo();
+        }
 
-    $conn->close();
+        $conn->null;
     }
 ?>
 

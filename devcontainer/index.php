@@ -5,17 +5,18 @@
         $title = $_POST['title'];
         $description = $_POST ['description'];
     
+        try {
+            $stmt = $pdo->prepare('INSERT INTO tasks(title, description) VALUES(:title, :description)');
+            $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+            $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+            $stmt->execute();
 
-        $sql = "INSERT INTO tasks (title, description) VALUES ('$title', '$description')";
-        $result = $pdo->query($sql);
-
-        if($result === TRUE){
-            echo "new record created successfully!";
-        } else {
-            echo "Error:" . $sql . "<br>" . $pdo->errorInfo();
+            if($stmt->rowCount()){
+                echo $title . " and " . $description . " added!";
+            }
+        } catch(PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
         }
-
-        $conn->null;
     }
 ?>
 

@@ -5,6 +5,7 @@
     $stmt->execute();
  
     $results = $stmt->fetchAll();
+
 ?>
 
 <!DOCTYPE html>
@@ -21,6 +22,7 @@
                     <th>Title</th>
                     <th>Description</th>
                     <th>Completion</th>
+                    <th>Action</th>
                 </tr>
                 
                 <?php 
@@ -33,7 +35,8 @@
                             echo "<td><input type=\"checkbox\"></td>";
                         } else {
                             echo "<td><input type=\"checkbox\" checked></td>";
-                        }        
+                        }
+                        echo "<td><a href=\"delete.php?id=" . $result['id'] . "\">x</a><a href=\"update.php?id=" . $result['id'] . "\"> edit</a></td>";        
                         echo  "</tr>";
                     }  
                 ?>

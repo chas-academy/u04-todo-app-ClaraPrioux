@@ -10,7 +10,7 @@ if(isset($_GET["id"])) {
         $stmt->execute();
 
         if($stmt->rowCount()){
-            echo "Row " . $id . " deleted!";
+            header("Location: index.php");
         }
 
     } catch(PDOException $e) {

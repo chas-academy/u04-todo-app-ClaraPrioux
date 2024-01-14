@@ -17,7 +17,8 @@ if(isset($_GET["id"])) {
             $stmt->execute();
 
             if($stmt->rowCount()){
-                echo $title . " and " . $description . " modified!";
+                header("Location: index.php");
+                exit();
             }
         } catch(PDOException $e) {
             echo 'Error: ' . $e->getMessage();
@@ -52,3 +53,47 @@ if(isset($_GET["id"])) {
         </form>
     </body>
 </html>
+
+<?php
+
+// READ
+
+    $stmt = $pdo->prepare("SELECT * FROM tasks");
+    $stmt->execute();
+ 
+    $results = $stmt->fetchAll();
+
+?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>View page</title>
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <div class="container">
+            <table class="table">
+                <tr>
+                </tr>
+                
+                <?php 
+                    foreach($results as $result) {
+                        echo "<tr>";
+                        if($result['completion'] == FALSE) {
+                            echo "<td><input type=\"checkbox\"></td>";
+                        } else {
+                            echo "<td><input type=\"checkbox\" checked></td>";
+                        }
+                        echo   "<td>" . $result['title'] . "</td>
+                                <td>" . $result['description'] . "</td>";
+                        echo "<td><a href=\"delete.php?id=" . $result['id'] . "\">x</a><a href=\"update.php?id=" . $result['id'] . "\"> edit</a></td>";        
+                        echo  "</tr>";
+                    }  
+                ?>
+            </table>
+        </div>
+    </body>
+</html>
+
+<?php 

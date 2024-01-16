@@ -31,6 +31,20 @@
             echo 'Error: ' . $e->getMessage();
         }
     }
+
+    if (isset($_POST['checkbox'])) {
+        try {
+            $checked = $pdo->prepare(
+                                "UPDATE tasks
+                                 SET completion={$_POST['checkbox']}
+                                 WHERE id={$_POST['id']}"
+                              );
+            
+            $checked->execute();
+        } catch(PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -69,13 +83,65 @@
                 </tr>
                 
                 <?php 
+                    $select = $pdo->prepare("SELECT id, completion FROM tasks");
+                    $select->execute();
+
+                    $result = $select->fetchAll();
+
                     foreach($results as $result) {
-                        echo "<tr>";
-                        if($result['completion'] == FALSE) {
-                            echo "<td><input type=\"checkbox\"></td>";
+                        echo "<td>";
+
+                        if ($result['completion']) {
+                            // Checkbox is checked
+                            echo "
+                                <form method='post' action='' id='form{$result['id']}'> 
+                                    <input
+                                        type='hidden'
+                                        name='id'
+                                        value={$result['id']}
+                                    />
+                                    <input
+                                        type='hidden'
+                                        name='checkbox'
+                                        id='checkboxHidden{$result['id']}'
+                                        value=0
+                                    />
+                                    <input
+                                        type='checkbox'
+                                        name='checkbox'
+                                        id='checkbox{$result['id']}'
+                                        value=1
+                                        onchange='changeHandler({$result["id"]})'
+                                        checked
+                                    />
+                                </form>
+                            ";
                         } else {
-                            echo "<td><input type=\"checkbox\" checked></td>";
+                            // checkbox not checked
+                            echo "
+                                <form method='post' action='' id='form{$result['id']}'>
+                                    <input
+                                        type='hidden'
+                                        name='id'
+                                        value={$result['id']}
+                                    />
+                                    <input
+                                        type='hidden'
+                                        name='checkbox'
+                                        id='checkboxHidden{$result['id']}'
+                                        value=0
+                                    />
+                                    <input
+                                        type='checkbox'
+                                        name='checkbox'
+                                        id='checkbox{$result['id']}'
+                                        value=1
+                                        onchange='changeHandler({$result["id"]})'
+                                    />
+                                </form>
+                            ";
                         }
+                    
                         echo   "<td>" . $result['title'] . "</td>
                                 <td>" . $result['description'] . "</td>";
                         echo "<td><a href=\"delete.php?id=" . $result['id'] . "\">x</a><a href=\"update.php?id=" . $result['id'] . "\"> edit</a></td>";        
@@ -86,3 +152,14 @@
         </div>
     </body>
 </html>
+<script>
+    function changeHandler(id) {
+        if(document.getElementById(`checkbox${id}`).checked) {
+            document.getElementById(`checkboxHidden${id}`).disabled = true;
+        } else {
+            document.getElementById(`checkboxHidden${id}`).disabled = false;
+        }
+        const form = document.getElementById(`form${id}`);
+        form.submit();
+    }
+</script>

@@ -1,0 +1,141 @@
+* body {
+    background: radial-gradient(circle, rgba(255,226,239,1) 1%, rgba(226,154,219,1) 50%, rgba(137,45,253,1) 100%);
+    }
+  
+  * {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+  }
+  
+  .main-section {
+    background: transparent;
+    width: 50%;
+    height: 500px;
+    margin: 30px auto;
+    border-radius: 10px;
+  }
+  
+  .tasks-section {
+    width: 100%;
+    background: #fff;
+    margin: 0px auto;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .tasks-section h2 {
+    text-align: center;
+    font-size: 80px;
+    font-family: 'Dancing Script', cursive;
+  }
+  
+  .tasks-section input {
+    display: block;
+    width: 95%;
+    height: 40px;
+    margin: 10px auto;
+    border: 2px solid #ccc;
+    font-size: 16px;
+    border-radius: 5px;
+    padding: 0px 5px;
+  }
+  
+  .tasks-section button {
+    display: block;
+    width: 95%;
+    height: 40px;
+    margin: 0px auto;
+    border: none;
+    outline: none;
+    background: #0088FF;
+    color: #fff;
+    font-family: sans-serif;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .tasks-section button:hover {
+    box-shadow: 0 2px 2px 0 #ccc, 0 2px 3px 0 #ccc;
+    opacity: 0.7;
+  }
+  
+  #errorMes {
+    display: block;
+    background: #f2dede;
+    width: 95%;
+    margin: 0px auto;
+    color: rgb(139, 19, 19);
+    padding: 10px;
+    height: 35px;
+  }
+  
+  .container {
+    width: 100%;
+    background: #fff;
+    margin: 30px auto;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .table tr {
+    width: 95%;
+    margin: 10px auto;
+    padding: 20px 10px;
+    box-shadow: 0 4px 8px 0 #ccc, 0 6px 20px 0 #ccc;
+    border-radius: 5px;
+  }
+  
+  .todo-title {
+    display: inline-block;
+    padding: 5px 0px;
+    font-size: 17px;
+    font-family: 'Raleway', sans-serif;
+    color: #555;
+  }
+  
+  .todo-description {
+    display: block;
+    width: 100%;
+    padding: 5px 0px;
+    color: #888;
+    padding-left: 30px;
+    font-size: 14px;
+    font-family: 'Raleway', sans-serif;
+  }
+  
+  .todo-X {
+    display: block;
+    float: right;
+    width: 20px;
+    height: 20px;
+    font-family: sans-serif;
+    color: rgb(139, 97, 93);
+    text-decoration: none;
+    text-align: right;
+    padding: 0px 5px 8px 0px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  .todo-X:hover {
+    background: rgb(139, 97, 93);
+    color: #fff;
+  }
+  
+  .checked {
+    color: #999 !important;
+    text-decoration: line-through;
+  }
+  
+  .table input {
+    margin: 0px 5px;
+  }
+  
+  .empty {
+    font-family: sans-serif;
+    font-size: 16px;
+    text-align: center;
+    color: #cccc;
+  } */

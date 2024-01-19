@@ -1,5 +1,5 @@
-* body {
-    background: radial-gradient(circle, rgba(255,226,239,1) 1%, rgba(226,154,219,1) 50%, rgba(137,45,253,1) 100%);
+body {
+    background: #f5f0e9;
     }
   
   * {
@@ -28,27 +28,33 @@
     text-align: center;
     font-size: 80px;
     font-family: 'Dancing Script', cursive;
+    color:#700325;
   }
   
-  .tasks-section input {
+  .tasks-section input, .no-bootstrap-styles {
     display: block;
-    width: 95%;
+    width: 70%;
     height: 40px;
     margin: 10px auto;
     border: 2px solid #ccc;
     font-size: 16px;
     border-radius: 5px;
     padding: 0px 5px;
+    font-family: 'Raleway', sans-serif;
+  }
+
+  #description {
+    height: 80px;
   }
   
   .tasks-section button {
     display: block;
-    width: 95%;
+    width: 70%;
     height: 40px;
     margin: 0px auto;
     border: none;
     outline: none;
-    background: #0088FF;
+    background: #700325;
     color: #fff;
     font-family: sans-serif;
     font-size: 16px;
@@ -80,57 +86,40 @@
   }
   
   .table tr {
-    width: 95%;
-    margin: 10px auto;
-    padding: 20px 10px;
     box-shadow: 0 4px 8px 0 #ccc, 0 6px 20px 0 #ccc;
     border-radius: 5px;
+    position: relative;
+  }
+
+  .table a {
+    text-decoration: none;
+    color: #700325;
+
+  }
+
+  .table a:hover {
+    background: rgb(139, 97, 93);
+    color: #fff;
+    border-radius: 10%;
+    padding: 10%;
   }
   
   .todo-title {
     display: inline-block;
-    padding: 5px 0px;
+    padding: 4% 4% 1.5% 4%;
     font-size: 17px;
     font-family: 'Raleway', sans-serif;
-    color: #555;
+    color: #700325;
+    font-weight: 600;
   }
   
   .todo-description {
     display: block;
-    width: 100%;
-    padding: 5px 0px;
+    width: 80%;
+    padding: 1.5% 4% 4% 4%;
     color: #888;
-    padding-left: 30px;
     font-size: 14px;
     font-family: 'Raleway', sans-serif;
-  }
-  
-  .todo-X {
-    display: block;
-    float: right;
-    width: 20px;
-    height: 20px;
-    font-family: sans-serif;
-    color: rgb(139, 97, 93);
-    text-decoration: none;
-    text-align: right;
-    padding: 0px 5px 8px 0px;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-  
-  .todo-X:hover {
-    background: rgb(139, 97, 93);
-    color: #fff;
-  }
-  
-  .checked {
-    color: #999 !important;
-    text-decoration: line-through;
-  }
-  
-  .table input {
-    margin: 0px 5px;
   }
   
   .empty {
@@ -138,4 +127,4 @@
     font-size: 16px;
     text-align: center;
     color: #cccc;
-  } */
+  } 

@@ -1,8 +1,3 @@
-<?php 
-
-    require 'config.php';
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,34 +28,22 @@
 
 <?php
 // CREATE 
+    require_once 'databaseAccessObject.php';
+
+    $taskDAO = new TaskDAO();
 
     if(isset($_POST['submit'])) {
         $title = $_POST['title'];
         $description = $_POST ['description'];
     
-        try {
-            $stmt = $pdo->prepare('INSERT INTO tasks(title, description) VALUES(:title, :description)');
-            $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-            $stmt->bindParam(':description', $description, PDO::PARAM_STR);
-            $stmt->execute();
-
-        } catch(PDOException $e) {
-            echo 'Error: ' . $e->getMessage();
-        }
+        $taskDAO->insertTask($title, $description);
     }
 
     if (isset($_POST['checkbox'])) {
-        try {
-            $checked = $pdo->prepare(
-                                "UPDATE tasks
-                                 SET completion={$_POST['checkbox']}
-                                 WHERE id={$_POST['id']}"
-                              );
-            
-            $checked->execute();
-        } catch(PDOException $e) {
-            echo $e->getMessage();
-        }
+        $completion=$_POST['checkbox'];
+        $id=$_POST['id'];
+        
+        $taskDAO->completionUpdate($id, $completion);
     }
 ?>
 
@@ -68,10 +51,7 @@
 
 // READ
 
-    $stmt = $pdo->prepare("SELECT * FROM tasks");
-    $stmt->execute();
- 
-    $results = $stmt->fetchAll();
+$results = $taskDAO->readTasks();
 
 ?>
 
@@ -83,10 +63,6 @@
                 <tr>
                 
                 <?php 
-                    $select = $pdo->prepare("SELECT id, completion FROM tasks");
-                    $select->execute();
-
-                    $result = $select->fetchAll();
 
                     foreach($results as $result) {
                         echo "<td>";

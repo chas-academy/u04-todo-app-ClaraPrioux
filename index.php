@@ -1,3 +1,36 @@
+<?php
+
+    require_once 'databaseAccessObject.php';
+    
+    session_start();
+    
+    if(isset($_SESSION['Username'])) {
+        $loggedInUser = $_SESSION['Username'];
+    } else {
+        header("Location: loginScreen.php?unsuccessfullogin");
+    }
+
+    // CREATE 
+
+    $taskDAO = new TaskDAO();
+
+    if(isset($_POST['submit'])) {
+        $title = $_POST['title'];
+        $description = $_POST ['description'];
+
+        $taskDAO->insertTask($title, $description);
+    }
+
+    if (isset($_POST['checkbox'])) {
+        $completion=$_POST['checkbox'];
+        $id=$_POST['id'];
+        
+        $taskDAO->completionUpdate($id, $completion);
+    }
+    // READ 
+    $results = $taskDAO->readTasks();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,6 +49,9 @@
     <div class="main-section">
        <div class="tasks-section">
         <h2>To-do list</h2>
+        <?php if(!empty($loggedInUser)): ?>
+            <p>Welcome, <?php echo $loggedInUser; ?>!</p>
+        <?php endif; ?>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
             <form action="" method="POST">
                 <input type="text" name="title" placeholder="Enter task title..."><br>
@@ -23,41 +59,6 @@
                 <button type="submit" name="submit" value="Submit">Add +</button>
             </form>
         </div>
-</body>
-</html>
-
-<?php
-// CREATE 
-    require_once 'databaseAccessObject.php';
-
-    $taskDAO = new TaskDAO();
-
-    if(isset($_POST['submit'])) {
-        $title = $_POST['title'];
-        $description = $_POST ['description'];
-    
-        $taskDAO->insertTask($title, $description);
-    }
-
-    if (isset($_POST['checkbox'])) {
-        $completion=$_POST['checkbox'];
-        $id=$_POST['id'];
-        
-        $taskDAO->completionUpdate($id, $completion);
-    }
-?>
-
-<?php
-
-// READ
-
-$results = $taskDAO->readTasks();
-
-?>
-
-<!DOCTYPE html>
-<html>
-    <body>
         <div class="container">
             <table class="table">
                 <tr>
@@ -129,9 +130,7 @@ $results = $taskDAO->readTasks();
                 ?>
             </table>
         </div>
-        
-    </div>
-    </body>
+</body>
 </html>
 <script>
     function changeHandler(id) {

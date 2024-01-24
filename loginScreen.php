@@ -7,6 +7,10 @@
     if(isset($_POST["inputUsername"])) {
         $taskCRUD -> registerUser($_POST['inputUsername'],$_POST['inputPassword']);
     }
+
+    if(isset($_GET["unsuccessfullogin"])) {
+        print ('<p>Wrong login, check your credentials.</p>');
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">

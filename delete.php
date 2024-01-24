@@ -1,21 +1,15 @@
 <?php 
+require_once 'databaseAccessObject.php';
 
-include "config.php";
+$taskDAO = new TaskDAO();
 
 if(isset($_GET["id"])) {
     $id = $_GET['id'];
-    try {
-        $stmt = $pdo->prepare('DELETE FROM tasks WHERE id = :id');
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
 
-        if($stmt->rowCount()){
-            header("Location: index.php");
-        }
-
-    } catch(PDOException $e) {
-        echo 'Error: ' . $e->getMessage();
+    if($taskDAO->deleteSingleTask($id)){
+        header("Location: index.php");
     }
+
 } else {
     echo "No id in URL";
 }

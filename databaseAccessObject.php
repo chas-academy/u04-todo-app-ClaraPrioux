@@ -18,11 +18,12 @@ class TaskDAO {
         }
     }
 
-    public function insertTask($title, $description) {
+    public function insertTask($title, $description, $userID) {
         try {
-            $stmt = $this->conn->prepare('INSERT INTO tasks(title, description) VALUES(:title, :description)');
+            $stmt = $this->conn->prepare('INSERT INTO tasks(title, description, userID) VALUES(:title, :description, :userID)');
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+            $stmt->bindParam(':userID', $userID, PDO::PARAM_STR);
             $stmt->execute();
 
         } catch(PDOException $e) {
@@ -30,9 +31,10 @@ class TaskDAO {
         }
     }
 
-    public function readTasks(){
+    public function readTasks($userID){
         try {
-            $stmt = $this->conn->prepare("SELECT * FROM tasks");
+            $stmt = $this->conn->prepare("SELECT * FROM tasks WHERE userID=:userID");
+            $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
             $stmt->execute();
  
             $results = $stmt->fetchAll();
@@ -122,27 +124,58 @@ class TaskDAO {
     function loginUser($username, $password){
         
         try {
-            $stmt = $this->conn->prepare('SELECT Password FROM Users WHERE Username=:username');
+            $stmt = $this->conn->prepare('SELECT Password, userID FROM Users WHERE Username=:username');
             $stmt->bindParam("username",$username);
             $stmt->execute();
     
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
-    
+            
+            // The user doesn't exist, return -1 (because this value will never exist)
             if(empty($result)){
-                return false;
+                return -1;
             }
     
-            if(password_verify($password,$result[0]['Password'])) {
-                return true; 
+            if(password_verify($password, $result[0]['Password'])) {
+                return $result[0]['userID']; 
             }
     
-            return false;
+            // Wrong password but user exists, return -2 (another value that will never exist in the db and different fromt the other false)
+            return -2;
     
             // this means that password_verify will compare the $password with the first one in the fetchAll result (which is an array of an array, we only want the userPass array in the whole array).
     
         } catch (PDOException $error) {
             echo "Connection failed: " . $error->getMessage();
+        }
+    }
+
+    function getLists($userID){
+        try {
+            $stmt = $this->conn->prepare("SELECT * FROM lists WHERE userID=:userID");
+            $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
+            $stmt->execute();
+ 
+            $results = $stmt->fetchAll();
+            return $results;
+
+        } catch(PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
+    }
+
+    public function readTasksByList($userID, $listId){
+        try {
+            $stmt = $this->conn->prepare("SELECT * FROM tasks WHERE userID=:userID AND listId=:listId");
+            $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
+            $stmt->bindParam(':listId', $listId, PDO::PARAM_INT);
+            $stmt->execute();
+ 
+            $results = $stmt->fetchAll();
+            return $results;
+
+        } catch(PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
         }
     }
 }

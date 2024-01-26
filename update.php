@@ -1,6 +1,16 @@
 <?php 
 require_once 'databaseAccessObject.php';
 
+session_start();
+    
+if(isset($_SESSION['Username'])) {
+    $loggedInUser = $_SESSION['Username'];
+    $loggedUserId = $_SESSION['UserID'];
+
+} else {
+    header("Location: loginScreen.php");
+}
+
 $taskDAO = new TaskDAO();
 
 if(isset($_GET["id"])) {
@@ -15,7 +25,7 @@ if(isset($_GET["id"])) {
     
     $specific_result = $taskDAO->readSingleTask($id);
 
-    $results = $taskDAO->readTasks();
+    $results = $taskDAO->readTasks($loggedUserId);
 
 } else {
     echo "No id in URL";
@@ -37,6 +47,9 @@ if(isset($_GET["id"])) {
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 <body>
+    <form action="" method="POST">
+        <button type="submit" name="logout" class="btn btn-dark">Log out</button>
+    </form>
     <div class="main-section">
        <div class="tasks-section">
         <h2>To-do list</h2>

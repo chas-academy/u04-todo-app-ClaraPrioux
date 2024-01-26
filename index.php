@@ -6,8 +6,10 @@
     
     if(isset($_SESSION['Username'])) {
         $loggedInUser = $_SESSION['Username'];
+        $loggedUserId = $_SESSION['UserID'];
+
     } else {
-        header("Location: loginScreen.php?unsuccessfullogin");
+        header("Location: loginScreen.php");
     }
 
     // CREATE 
@@ -18,7 +20,7 @@
         $title = $_POST['title'];
         $description = $_POST ['description'];
 
-        $taskDAO->insertTask($title, $description);
+        $taskDAO->insertTask($title, $description, $loggedUserId);
     }
 
     if (isset($_POST['checkbox'])) {
@@ -27,8 +29,26 @@
         
         $taskDAO->completionUpdate($id, $completion);
     }
+
+    if(isset($_POST['logout'])) {
+        session_destroy();
+        header("Location: loginScreen.php");
+        exit();
+    }
+
+    if(isset($_POST['lists'])) {
+        if($_POST['lists'] == "all") {
+            $results = $taskDAO->readTasks($loggedUserId);
+        } else {
+            $results = $taskDAO->readTasksByList($loggedUserId, $_POST['lists']);
+        }
+    } else {
+        $results = $taskDAO->readTasks($loggedUserId);
+    }
+
+
     // READ 
-    $results = $taskDAO->readTasks();
+    $resultsLists = $taskDAO->getLists($loggedUserId);
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +66,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 <body>
+    <form action="" method="POST">
+        <button type="submit" name="logout" class="btn btn-dark">Log out</button>
+    </form>
     <div class="main-section">
        <div class="tasks-section">
         <h2>To-do list</h2>
@@ -58,6 +81,24 @@
                 <textarea type="text" name="description" id="description" class="no-bootstrap-styles" placeholder="Enter task description..."></textarea><br>
                 <button type="submit" name="submit" value="Submit">Add +</button>
             </form>
+        <form id="listsForm" action="" method="POST">
+            <label for="lists">Choose a list:</label>
+            <select id="lists" name="lists">
+                <option value="all">All</option>
+            <?php 
+            foreach($resultsLists as $list) {
+                $selected = "";
+                if(isset($_POST['lists'])) {
+                    $listValue = $_POST['lists'];
+                    if($listValue == $list['listId']) {
+                        $selected = "selected";
+                    }
+                }
+                echo "<option value=\"" . $list['listId'] . "\" ".$selected ." >" . $list['listName'] . "</option>";
+            }
+            ?>
+            </select>
+        </form>
         </div>
         <div class="container">
             <table class="table">
@@ -142,4 +183,11 @@
         const form = document.getElementById(`form${id}`);
         form.submit();
     }
+
+    document.getElementById('lists').addEventListener('change', function() {
+        var form = document.getElementById('listsForm');
+        
+        form.submit();
+    });
+
 </script>

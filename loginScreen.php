@@ -8,8 +8,12 @@
         $taskCRUD -> registerUser($_POST['inputUsername'],$_POST['inputPassword']);
     }
 
-    if(isset($_GET["unsuccessfullogin"])) {
-        print ('<p>Wrong login, check your credentials.</p>');
+    if(isset($_GET["userdoesntexist"])) {
+        print ('<p>This user doesn\'t exist.</p>');
+    }
+
+    if(isset($_GET["wrongpassword"])) {
+        print ('<p>Wrong Password.</p>');
     }
 ?>
 <!DOCTYPE html>

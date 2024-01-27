@@ -2,11 +2,14 @@
   padding: 0px;
   margin: 0px;
   box-sizing: border-box;
-  background-color: #f5f0e9;
 }
 
 body {
   background-color: #f5f0e9 !important;
+}
+
+#logout {
+  background-color:#f5f0e9;
 }
 
 .main-section {
@@ -15,6 +18,12 @@ body {
   height: 500px;
   margin: 30px auto;
   border-radius: 10px;
+  font-family: 'Raleway', sans-serif;
+}
+
+.main-section p {
+  margin-right: 12%;
+  margin-left: 12%;
 }
 
 .tasks-section {
@@ -25,6 +34,7 @@ body {
   border-radius: 5px;
   background-color: #fff;
   box-shadow: 0 4px 8px 0 #ccc, 0 6px 20px 0 #ccc;
+  text-align: center;
 }
 
 .tasks-section h2 {
@@ -36,8 +46,12 @@ body {
   margin: 0;
 }
 
-form {
-  background-color: #fff;
+#taskLists {
+  width: 70%;
+}
+
+.tasks-section label {
+  margin: 1%;
 }
 
 .tasks-section input, .no-bootstrap-styles {
@@ -53,8 +67,16 @@ form {
   font-family: 'Raleway', sans-serif;
 }
 
+#newListName {
+    margin-bottom: 5%;
+}
+
 #description {
   height: 80px;
+}
+
+.btn {
+  margin-right: 2%;
 }
 
 .tasks-section button {
@@ -154,7 +176,7 @@ td.form-check-inline .custom-checkbox:checked {
   font-size: 16px;
   text-align: center;
   color: #cccc;
-} 
+}
 
 @media only screen and (max-width: 844px) {
   .main-section {

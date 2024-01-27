@@ -27,6 +27,7 @@ class TaskDAO {
             $stmt->bindParam(':listId', $listId, PDO::PARAM_STR);
             $stmt->execute();
 
+            echo "<div style=\"text-align: center; font-size:20px;\">Task added successfully!</div>";
         } catch(PDOException $e) {
             echo 'Error: ' . $e->getMessage();
         }
@@ -82,6 +83,8 @@ class TaskDAO {
             $stmt = $this->conn->prepare('DELETE FROM tasks WHERE id = :id');
             $stmt->bindParam(':id', $id);
             $stmt->execute();
+
+            echo "<div style=\"text-align: center; font-size:20px;\">Task deleted successfully!</div>";
     
             return $stmt->rowCount();
     
@@ -118,6 +121,8 @@ class TaskDAO {
             $stmt->bindParam("username",$username);
             $stmt->bindParam("password",$password);
             $stmt->execute();
+
+            echo "<div style=\"text-align: center; font-size:20px;\">User registration successful! Welcome aboard!</div>";
         } catch (PDOException $error) {
             echo "Connection failed: " . $error->getMessage();
         }
@@ -187,6 +192,8 @@ class TaskDAO {
             $stmt->bindParam(':listName', $listName, PDO::PARAM_STR);
             $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
             $stmt->execute();
+
+            echo "<div style=\"text-align: center; font-size:20px;\">New list added successfully!</div>";
             
             return $this->conn->lastInsertId();
     
@@ -223,3 +230,4 @@ class TaskDAO {
         }
     }
 }
+

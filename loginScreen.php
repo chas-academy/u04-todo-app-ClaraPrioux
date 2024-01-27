@@ -31,24 +31,25 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 <body>
+    <div class="tasks-section">
         <h2>Log in</h2>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-        <form action="loginprocess.php" method="POST">
+        <form action="loginprocess.php" method="POST" class="loginForm">
             <label for="loginUsername"><b></b></label>
             <input type="text" placeholder="Enter Username" name="loginUsername" required><br>
             <label for="loginPassword"><b></b></label>
-            <input type="text" placeholder="Enter Password" name="loginPassword" required><br>
+            <input type="password" placeholder="Enter Password" name="loginPassword" required><br>
             <button type="submit" name="submit" value="Submit">Log in</button>
         </form>
         <h2>Register</h2>
-        <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
+        <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST" class="loginForm">
             <label for="inputUsername"><b></b></label>
             <input type="text" placeholder="Enter Username" name="inputUsername" required><br>
             <label for="inputPassword"><b></b></label>
-            <input type="text" placeholder="Enter Password" name="inputPassword" required><br>
+            <input type="password" placeholder="Enter Password" name="inputPassword" required><br>
             <button type="submit" name="submit" value="Submit">Submit</button>
         </form>
-        
+    </div>  
 </body>
 </html>
 

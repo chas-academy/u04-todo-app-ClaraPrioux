@@ -94,20 +94,20 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 <body>
-    <form action="" method="POST">
-        <button type="submit" name="logout" class="btn btn-dark">Log out</button>
+    <form action="" method="POST" id="logout">
+        <button type="submit" name="logout" class="btn btn-dark" style="background-color: #700325;">Log out</button>
     </form>
     <div class="main-section">
        <div class="tasks-section">
         <h2>To-do list</h2>
         <?php if(!empty($loggedInUser)): ?>
-            <p>Welcome, <?php echo $loggedInUser; ?>!</p>
+            <strong><p>Welcome, <?php echo $loggedInUser; ?>!</strong> <br> Stay organized, boost productivity, and achieve your goals with our simple and efficient task management platform.</p>
         <?php endif; ?>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
             <form action="" method="POST">
                 <input type="text" name="title" placeholder="Enter task title..."><br>
-                <textarea type="text" name="description" id="description" class="no-bootstrap-styles" placeholder="Enter task description..."></textarea><br>
-                <label for="taskLists">In which list do you want to add the task?</label>
+                <textarea type="text" name="description" id="description" class="no-bootstrap-styles" placeholder="Enter task description..."></textarea>
+                <label for="taskLists">Choose task list:</label><br>
                     <select id="taskLists" name="taskLists">
                     <option value="all">All</option>
                     <?php
@@ -117,38 +117,38 @@
                         echo "<option value='{$list['listId']}'>{$list['listName']}</option>";
                     }
                     ?>
-                    </select>
-                    <label for="newListName">Create a new list:</label>
+                    </select><br>
+                    <label for="newListName">or Create a new list:</label>
                     <input type="text" id="newListName" name="newListName" placeholder="Enter new list name">
                 <button type="submit" name="submit" value="Submit">Add +</button>
             </form>
-        <form id="listsForm" action="" method="POST">
-            <label for="lists">Choose a list:</label>
-            <select id="lists" name="lists">
-                <option value="all">All</option>
-            <?php 
-            foreach($resultsLists as $list) {
-                $selected = "";
-                if(isset($_POST['lists'])) {
-                    $listValue = $_POST['lists'];
-                    if($listValue == $list['listId']) {
-                        $selected = "selected";
-                    }
-                }
-                echo "<option value=\"" . $list['listId'] . "\" ".$selected ." >" . $list['listName'] . "</option>";
-            }
-            ?>
-            </select>
-        </form>
         </div>
             
         <div class="container">
             <table class="table">
                 <tr>
                 <form action="" method="POST">
-                    <button type="submit" name="deleteAllChecked" class="btn btn-dark">Delete all checked</button>
-                    <button type="submit" name="markAllTasks" class="btn btn-dark">Mark all as checked</button>
+                    <button type="submit" name="deleteAllChecked" class="btn btn-dark" style="background-color: #700325;">Delete all checked</button>
+                    <button type="submit" name="markAllTasks" class="btn btn-dark" style="background-color: #700325;">Mark all as checked</button>
                 </form>
+                <form id="listsForm" action="" method="POST">
+                <label for="lists"></label>
+                <select id="lists" name="lists">
+                    <option value="all">Filter by List:</option>
+                    <?php 
+                    foreach($resultsLists as $list) {
+                        $selected = "";
+                        if(isset($_POST['lists'])) {
+                            $listValue = $_POST['lists'];
+                            if($listValue == $list['listId']) {
+                                $selected = "selected";
+                            }
+                        }
+                        echo "<option value=\"" . $list['listId'] . "\" ".$selected ." >" . $list['listName'] . "</option>";
+                    }
+                    ?>
+                </select>
+        </form>
                 <?php 
 
                     foreach($results as $result) {
@@ -235,5 +235,4 @@
         
         form.submit();
     });
-
 </script>

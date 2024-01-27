@@ -48,7 +48,7 @@ if(isset($_GET["id"])) {
 </head>
 <body>
     <form action="" method="POST">
-        <button type="submit" name="logout" class="btn btn-dark">Log out</button>
+        <button type="submit" name="logout" class="btn btn-dark" style="background-color: #700325;">Log out</button>
     </form>
     <div class="main-section">
        <div class="tasks-section">

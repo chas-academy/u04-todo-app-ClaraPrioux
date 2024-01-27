@@ -16,8 +16,9 @@ CREATE TABLE `lists` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 INSERT INTO `lists` (`listId`, `listName`, `userID`) VALUES
-(1,	'How to add the list to the database?',	1),
-(2,	'Chores ',	2);
+(21,	'Work',	5),
+(22,	'Personal',	5),
+(23,	'Home',	5);
 
 DROP TABLE IF EXISTS `tasks`;
 CREATE TABLE `tasks` (
@@ -35,27 +36,25 @@ CREATE TABLE `tasks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 INSERT INTO `tasks` (`id`, `title`, `description`, `completion`, `userID`, `listId`) VALUES
-(1,	'Study more',	'I have to learn more if I want to be the best Fullstack developer',	1,	NULL,	NULL),
-(3,	'Complete Project Proposal',	'Draft and finalize the project proposal document, outlining project goals, deliverables, and timelines for team review.',	0,	NULL,	NULL),
-(4,	'Grocery Shopping',	'Purchase essential groceries for the week, including fresh produce, dairy, and pantry staples to ensure a well-stocked kitchen.',	0,	NULL,	NULL),
-(5,	'Schedule Dentist Appointment',	'Call the dentist\'s office to schedule a routine check-up and cleaning. Choose a convenient time for the appointment.',	0,	NULL,	NULL),
-(6,	'Exam Preparation',	'Review and summarize key concepts from Chapter 6 for upcoming exams. Create a study plan to cover all relevant material effectively.',	0,	NULL,	NULL),
-(7,	'Attend Team Meeting',	'Participate in the team meeting at 2:00 PM to discuss project updates, address challenges, and collaborate on upcoming tasks and goals.',	0,	NULL,	NULL),
-(10,	'Tjena',	'hur Ã¤r lÃ¤get',	1,	NULL,	NULL),
-(11,	'Last test design ',	'Last test design before beginning the VG goals',	0,	NULL,	NULL),
-(13,	'First test with foreign key',	'I\'m just gonna try to add an todo list, but i will have to create a session so I don\'t need to add a user. ',	0,	1,	1),
-(14,	'Wash my clothes',	'I have to do it before the weekend ',	0,	2,	NULL);
+(48,	'Complete project report',	'Prepare and finalize the quarterly project report for client presentation.\r\n',	0,	5,	21),
+(49,	'Schedule team meeting',	'Set up a team meeting to discuss upcoming project deadlines.',	0,	5,	21),
+(50,	'Buy groceries',	'Make a list of essential groceries and head to the supermarket.',	0,	5,	22),
+(51,	'Exercise for 30 minutes',	'Engage in a 30-minute workout routine at home.',	0,	5,	22),
+(52,	'Read a chapter of a book ',	'Spend some time reading a chapter from your current book.',	0,	5,	22),
+(53,	'Clean the house',	'Tidy up each room, dust surfaces, and vacuum the floors.',	0,	5,	23),
+(54,	'Fix the leaking faucet',	'Repair the leaking faucet in the kitchen.',	0,	5,	23),
+(55,	'Water the plants',	'Ensure all indoor and outdoor plants receive proper watering.\r\n',	0,	5,	23),
+(56,	'Rearrange living room furniture',	'Consider rearranging the furniture for a fresh look.',	0,	5,	23);
 
 DROP TABLE IF EXISTS `Users`;
 CREATE TABLE `Users` (
   `userID` int(11) NOT NULL AUTO_INCREMENT,
-  `Username` varchar(25) NOT NULL,
-  `Password` varchar(25) NOT NULL,
+  `Username` varchar(255) NOT NULL,
+  `Password` varchar(255) NOT NULL,
   PRIMARY KEY (`userID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 INSERT INTO `Users` (`userID`, `Username`, `Password`) VALUES
-(1,	'Clara',	'blablabla'),
-(2,	'Quentin',	'jaimelestetardenini');
+(5,	'Clara',	'$2y$10$0mUJYXs2ZJJeD3RQ1Ud6NuetfOpAcS0bUUSQegyiL/qqzr5pQtnxO');
 
--- 2024-01-23 10:00:22
+-- 2024-01-27 21:15:35

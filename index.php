@@ -16,11 +16,32 @@
 
     $taskDAO = new TaskDAO();
 
-    if(isset($_POST['submit'])) {
-        $title = $_POST['title'];
-        $description = $_POST ['description'];
+    if (isset($_POST['submit'])) {
+        // To check if a new list is being created
+        if (isset($_POST['newListName'])) {
+            $newListName = $_POST['newListName'];
+            
 
-        $taskDAO->insertTask($title, $description, $loggedUserId);
+            if (!empty($newListName)) {
+                $newListId = $taskDAO->insertNewList($newListName, $loggedUserId);
+
+                $title = $_POST['title'];
+                $description = $_POST['description'];
+
+                $taskDAO->insertTask($title, $description, $loggedUserId, $newListId);
+
+            } else {
+            $title = $_POST['title'];
+            $description = $_POST['description'];
+            $listId = $_POST['taskLists'];
+    
+            // Check if a list is selected
+            if (empty($listId) || $listId === "all") {
+                echo "Please select a valid list before adding a task.";
+            } else {
+                $taskDAO->insertTask($title, $description, $loggedUserId, $listId);
+            }}
+        }
     }
 
     if (isset($_POST['checkbox'])) {
@@ -36,6 +57,14 @@
         exit();
     }
 
+    if(isset($_POST['deleteAllChecked'])) {
+        $taskDAO->deleteAllChecked($loggedUserId);
+    }
+    
+    if(isset($_POST['markAllTasks'])) {
+        $taskDAO->markAllTasks($loggedUserId);
+    }
+
     if(isset($_POST['lists'])) {
         if($_POST['lists'] == "all") {
             $results = $taskDAO->readTasks($loggedUserId);
@@ -45,7 +74,6 @@
     } else {
         $results = $taskDAO->readTasks($loggedUserId);
     }
-
 
     // READ 
     $resultsLists = $taskDAO->getLists($loggedUserId);
@@ -79,6 +107,19 @@
             <form action="" method="POST">
                 <input type="text" name="title" placeholder="Enter task title..."><br>
                 <textarea type="text" name="description" id="description" class="no-bootstrap-styles" placeholder="Enter task description..."></textarea><br>
+                <label for="taskLists">In which list do you want to add the task?</label>
+                    <select id="taskLists" name="taskLists">
+                    <option value="all">All</option>
+                    <?php
+                    $usersLists = $taskDAO->getLists($loggedUserId);
+
+                    foreach ($usersLists as $list) {
+                        echo "<option value='{$list['listId']}'>{$list['listName']}</option>";
+                    }
+                    ?>
+                    </select>
+                    <label for="newListName">Create a new list:</label>
+                    <input type="text" id="newListName" name="newListName" placeholder="Enter new list name">
                 <button type="submit" name="submit" value="Submit">Add +</button>
             </form>
         <form id="listsForm" action="" method="POST">
@@ -100,10 +141,14 @@
             </select>
         </form>
         </div>
+            
         <div class="container">
             <table class="table">
                 <tr>
-                
+                <form action="" method="POST">
+                    <button type="submit" name="deleteAllChecked" class="btn btn-dark">Delete all checked</button>
+                    <button type="submit" name="markAllTasks" class="btn btn-dark">Mark all as checked</button>
+                </form>
                 <?php 
 
                     foreach($results as $result) {
@@ -171,6 +216,7 @@
                 ?>
             </table>
         </div>
+
 </body>
 </html>
 <script>

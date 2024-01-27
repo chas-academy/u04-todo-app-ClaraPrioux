@@ -18,12 +18,13 @@ class TaskDAO {
         }
     }
 
-    public function insertTask($title, $description, $userID) {
+    public function insertTask($title, $description, $userID, $listId) {
         try {
-            $stmt = $this->conn->prepare('INSERT INTO tasks(title, description, userID) VALUES(:title, :description, :userID)');
+            $stmt = $this->conn->prepare('INSERT INTO tasks(title, description, userID, listId) VALUES(:title, :description, :userID, :listId)');
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':description', $description, PDO::PARAM_STR);
             $stmt->bindParam(':userID', $userID, PDO::PARAM_STR);
+            $stmt->bindParam(':listId', $listId, PDO::PARAM_STR);
             $stmt->execute();
 
         } catch(PDOException $e) {
@@ -91,9 +92,10 @@ class TaskDAO {
 
     public function completionUpdate($id, $completion) {
         try {
+
             $stmt = $this->conn->prepare('UPDATE tasks SET completion=:completion WHERE id=:id');
-            $stmt->bindParam(':id', $id, PDO::PARAM_STR);
-            $stmt->bindParam(':completion', $completion, PDO::PARAM_STR);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt->bindParam(':completion', $completion, PDO::PARAM_INT);
             $stmt->execute();
 
         } catch(PDOException $e) {
@@ -169,6 +171,48 @@ class TaskDAO {
             $stmt = $this->conn->prepare("SELECT * FROM tasks WHERE userID=:userID AND listId=:listId");
             $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
             $stmt->bindParam(':listId', $listId, PDO::PARAM_INT);
+            $stmt->execute();
+ 
+            $results = $stmt->fetchAll();
+            return $results;
+
+        } catch(PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
+    }
+
+    public function insertNewList($listName, $userID) {
+        try {
+            $stmt = $this->conn->prepare('INSERT INTO lists(listName, userID) VALUES(:listName, :userID)');
+            $stmt->bindParam(':listName', $listName, PDO::PARAM_STR);
+            $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $this->conn->lastInsertId();
+    
+        } catch(PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
+    }
+    
+    public function deleteAllChecked($userID){
+        try {
+            $stmt = $this->conn->prepare("DELETE FROM tasks WHERE userId=:userID AND completion = 1;");
+            $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
+            $stmt->execute();
+ 
+            $results = $stmt->fetchAll();
+            return $results;
+
+        } catch(PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+        }
+    }
+
+    public function markAllTasks($userID){
+        try {
+            $stmt = $this->conn->prepare("UPDATE tasks SET completion=1 WHERE userID=:userID;");
+            $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
             $stmt->execute();
  
             $results = $stmt->fetchAll();

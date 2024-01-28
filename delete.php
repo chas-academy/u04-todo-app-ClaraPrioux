@@ -1,8 +1,10 @@
 <?php 
 require_once 'databaseAccessObject.php';
 
+// Create a new instance
 $taskDAO = new TaskDAO();
 
+// Take the task's id selected, then call the method in taskDAO to delete it. 
 if(isset($_GET["id"])) {
     $id = $_GET['id'];
 

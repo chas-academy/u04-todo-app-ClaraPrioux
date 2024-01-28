@@ -4,14 +4,17 @@
 
     $taskCRUD = new TaskDAO();
 
+    // Calls the registerUser() methods if a inputUsername has been added 
     if(isset($_POST["inputUsername"])) {
         $taskCRUD -> registerUser($_POST['inputUsername'],$_POST['inputPassword']);
     }
 
+    // Check if the 'userdoesntexist' query parameter is present in the URL (see loginprocess.php).
     if(isset($_GET["userdoesntexist"])) {
         print ('<p>This user doesn\'t exist.</p>');
     }
 
+    // Check if the 'wrongpassword' query parameter is present in the URL (see loginprocess.php).
     if(isset($_GET["wrongpassword"])) {
         print ('<p>Wrong Password.</p>');
     }
@@ -31,6 +34,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 <body>
+    <!-- Forms to log in or register -->
     <div class="tasks-section">
         <h2>Log in</h2>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

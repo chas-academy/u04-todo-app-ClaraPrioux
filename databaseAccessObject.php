@@ -1,8 +1,10 @@
 <?php
 
+// I created a class that contains all the methods needed to make this to-do app works
 class TaskDAO {
     private $conn;
 
+    // Database connection using pdo
     function __construct() {
         $DB_HOST = "db";
         $DB_USER = "root";
@@ -18,9 +20,13 @@ class TaskDAO {
         }
     }
 
+    // Inserts a new task into the database.
     public function insertTask($title, $description, $userID, $listId) {
         try {
+            // Prepare a SQL statement to insert a new task into the 'tasks' table.
             $stmt = $this->conn->prepare('INSERT INTO tasks(title, description, userID, listId) VALUES(:title, :description, :userID, :listId)');
+            
+            // Bind parameters to the prepared statement.
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':description', $description, PDO::PARAM_STR);
             $stmt->bindParam(':userID', $userID, PDO::PARAM_STR);
@@ -33,6 +39,7 @@ class TaskDAO {
         }
     }
 
+    // Retrieves tasks associated with a specific user from the database.
     public function readTasks($userID){
         try {
             $stmt = $this->conn->prepare("SELECT * FROM tasks WHERE userID=:userID");
@@ -47,6 +54,7 @@ class TaskDAO {
         }
     }
 
+    // Update a specific task by using task's id into the database.
     public function updateTasks($title, $description, $id){
         try {
             $stmt = $this->conn->prepare('UPDATE tasks SET title = :title, description = :description WHERE id = :id');
@@ -64,6 +72,7 @@ class TaskDAO {
         }
     }
 
+    // Retrieves a single task from the database, using task's id. Used after updateTasks().
     public function readSingleTask($id){
         try {
             $stmt = $this->conn->prepare('SELECT * FROM tasks WHERE id = :id');
@@ -78,14 +87,13 @@ class TaskDAO {
         }
     }
 
+    // Delete a specific task by using task's id into the database.
     public function deleteSingleTask($id){
         try {
             $stmt = $this->conn->prepare('DELETE FROM tasks WHERE id = :id');
             $stmt->bindParam(':id', $id);
             $stmt->execute();
 
-            echo "<div style=\"text-align: center; font-size:20px;\">Task deleted successfully!</div>";
-    
             return $stmt->rowCount();
     
         } catch(PDOException $e) {
@@ -93,6 +101,7 @@ class TaskDAO {
         }
     }
 
+    // Update a specific checkbox by using task's id into the database.
     public function completionUpdate($id, $completion) {
         try {
 
@@ -106,14 +115,17 @@ class TaskDAO {
         }
     }
 
+    // Sanitizes input by removing HTML tags and special characters to prevent potential security vulnerabilities.
     private function secureInput($input){
         return htmlspecialchars(strip_tags($input));
     }
 
-    function registerUser($username, $password){
+    // Create a new user and insert it in the database
+    public function registerUser($username, $password){
         $username = $this->secureInput($username);
         $password = $this->secureInput($password);
-    
+        
+        // Hash the password using the bcrypt algorithm for secure storage.
         $password = password_hash($password,PASSWORD_BCRYPT);
 
         try {
@@ -128,7 +140,8 @@ class TaskDAO {
         }
     }
 
-    function loginUser($username, $password){
+    // Log in the user by verifying the username, then the password. 
+    public function loginUser($username, $password){
         
         try {
             $stmt = $this->conn->prepare('SELECT Password, userID FROM Users WHERE Username=:username');
@@ -157,7 +170,8 @@ class TaskDAO {
         }
     }
 
-    function getLists($userID){
+    // Retrieves lists from the database using userID
+    public function getLists($userID){
         try {
             $stmt = $this->conn->prepare("SELECT * FROM lists WHERE userID=:userID");
             $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
@@ -171,6 +185,7 @@ class TaskDAO {
         }
     }
 
+    // Filters tasks by list using userID and listID
     public function readTasksByList($userID, $listId){
         try {
             $stmt = $this->conn->prepare("SELECT * FROM tasks WHERE userID=:userID AND listId=:listId");
@@ -186,6 +201,7 @@ class TaskDAO {
         }
     }
 
+    // Create a new list using userID and listID
     public function insertNewList($listName, $userID) {
         try {
             $stmt = $this->conn->prepare('INSERT INTO lists(listName, userID) VALUES(:listName, :userID)');
@@ -202,6 +218,7 @@ class TaskDAO {
         }
     }
     
+    // Checks which checkboxes has been checked (1) inside the userID's tasks and delete all
     public function deleteAllChecked($userID){
         try {
             $stmt = $this->conn->prepare("DELETE FROM tasks WHERE userId=:userID AND completion = 1;");
@@ -216,6 +233,7 @@ class TaskDAO {
         }
     }
 
+    // Changes all the completion to 1, but only for user's tasks
     public function markAllTasks($userID){
         try {
             $stmt = $this->conn->prepare("UPDATE tasks SET completion=1 WHERE userID=:userID;");

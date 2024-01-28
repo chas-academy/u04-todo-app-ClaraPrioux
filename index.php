@@ -1,9 +1,10 @@
 <?php
 
     require_once 'databaseAccessObject.php';
-    
+    // When the user logged in, open a session. 
     session_start();
     
+    // Check if a user is logged in, then retrieve the username and user ID from the session.
     if(isset($_SESSION['Username'])) {
         $loggedInUser = $_SESSION['Username'];
         $loggedUserId = $_SESSION['UserID'];
@@ -16,12 +17,13 @@
 
     $taskDAO = new TaskDAO();
 
+    // Check if the form is submitted by checking the presence of the 'submit' key in the POST data.
     if (isset($_POST['submit'])) {
         // To check if a new list is being created
         if (isset($_POST['newListName'])) {
             $newListName = $_POST['newListName'];
             
-
+            // To check if the user wrote a new list name, if yes insertNewList() then insertTask()
             if (!empty($newListName)) {
                 $newListId = $taskDAO->insertNewList($newListName, $loggedUserId);
 
@@ -29,13 +31,14 @@
                 $description = $_POST['description'];
 
                 $taskDAO->insertTask($title, $description, $loggedUserId, $newListId);
-
+            
+            // The user didn't write a new list name, so check if he selected a listName, if yes insertTask()
             } else {
             $title = $_POST['title'];
             $description = $_POST['description'];
             $listId = $_POST['taskLists'];
-    
-            // Check if a list is selected
+            
+            // The user didn't write a new list name, and didn't select a listName
             if (empty($listId) || $listId === "all") {
                 echo "Please select a valid list before adding a task.";
             } else {
@@ -44,6 +47,7 @@
         }
     }
 
+    // Check if a checkbox has been clicked by checking the presence of the 'checkbox' key in the POST data and call the completionUpdate().
     if (isset($_POST['checkbox'])) {
         $completion=$_POST['checkbox'];
         $id=$_POST['id'];
@@ -51,20 +55,24 @@
         $taskDAO->completionUpdate($id, $completion);
     }
 
+    // Check if the logout button has been clicked by checking the presence of the 'logout' key in the POST data and then close the session.
     if(isset($_POST['logout'])) {
         session_destroy();
         header("Location: loginScreen.php");
         exit();
     }
 
+    // Check if the deleteAllChecked button has been clicked, if yes then call the function corresponding.
     if(isset($_POST['deleteAllChecked'])) {
         $taskDAO->deleteAllChecked($loggedUserId);
     }
-    
+
+    // Check if the markAllTasks button has been clicked, if yes then call the function corresponding.
     if(isset($_POST['markAllTasks'])) {
         $taskDAO->markAllTasks($loggedUserId);
     }
 
+    // Check if a list has been selected in the dropdown to filter the tasks, if yes then call the function corresponding.
     if(isset($_POST['lists'])) {
         if($_POST['lists'] == "all") {
             $results = $taskDAO->readTasks($loggedUserId);
@@ -98,7 +106,8 @@
         <button type="submit" name="logout" class="btn btn-dark" style="background-color: #700325;">Log out</button>
     </form>
     <div class="main-section">
-       <div class="tasks-section">
+        <!-- Form to create a new task with a corresponding list -->
+        <div class="tasks-section">
         <h2>To-do list</h2>
         <?php if(!empty($loggedInUser)): ?>
             <strong><p>Welcome, <?php echo $loggedInUser; ?>!</strong> <br> Stay organized, boost productivity, and achieve your goals with our simple and efficient task management platform.</p>
@@ -118,12 +127,13 @@
                     }
                     ?>
                     </select><br>
-                    <label for="newListName">or Create a new list:</label>
-                    <input type="text" id="newListName" name="newListName" placeholder="Enter new list name">
+                <label for="newListName">or Create a new list:</label>
+                <input type="text" id="newListName" name="newListName" placeholder="Enter new list name">
                 <button type="submit" name="submit" value="Submit">Add +</button>
             </form>
         </div>
-            
+        
+        <!-- This is the part where tasks are displayed, modified or deleted. -->
         <div class="container">
             <table class="table">
                 <tr>
@@ -220,7 +230,9 @@
 </body>
 </html>
 <script>
+    // Function to manage checkbox status in the frontend.
     function changeHandler(id) {
+        // Check if the checkbox with the given id is checked, then if checked disable it and vice versa.
         if(document.getElementById(`checkbox${id}`).checked) {
             document.getElementById(`checkboxHidden${id}`).disabled = true;
         } else {
@@ -230,6 +242,7 @@
         form.submit();
     }
 
+    // Eventlistener so if the user chose a list in "Filter by list", submit it. 
     document.getElementById('lists').addEventListener('change', function() {
         var form = document.getElementById('listsForm');
         

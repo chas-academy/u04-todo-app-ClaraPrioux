@@ -2,7 +2,7 @@
 require_once 'databaseAccessObject.php';
 
 session_start();
-    
+
 if(isset($_SESSION['Username'])) {
     $loggedInUser = $_SESSION['Username'];
     $loggedUserId = $_SESSION['UserID'];
@@ -13,6 +13,7 @@ if(isset($_SESSION['Username'])) {
 
 $taskDAO = new TaskDAO();
 
+// Take the task's id selected, redeclare the new $title and $description before calling the updateTasks().
 if(isset($_GET["id"])) {
     $id = $_GET['id'];
 
@@ -23,8 +24,10 @@ if(isset($_GET["id"])) {
         $taskDAO->updateTasks($title, $description, $id);
     }
     
+    // To display the updated task
     $specific_result = $taskDAO->readSingleTask($id);
 
+    // To keep displaying only the user's tasks
     $results = $taskDAO->readTasks($loggedUserId);
 
 } else {
@@ -35,6 +38,7 @@ if(isset($_GET["id"])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Same code as index.php -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
